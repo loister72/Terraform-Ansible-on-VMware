@@ -49,7 +49,7 @@ resource "vsphere_virtual_machine" "vm" {
     customize{
       windows_options {
         computer_name = var.vsphere_virtual_machine_name
-        admin_password = var.vm_password == "" ? random_password.password.result : var.vm_password
+        admin_password = var.vm_password
         workgroup        = "WORKGROUP"
         auto_logon       = true
         auto_logon_count = 1

@@ -50,5 +50,5 @@ variable "dns_domain" {
   }
 
 variable "vm_password" {
-    default = ""
+    default = "P@ssw0rd123"
   }
