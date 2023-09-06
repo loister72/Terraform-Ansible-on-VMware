@@ -1,85 +1,60 @@
-
-terraform {
-  required_providers {
-    vsphere = {
-      source = "hashicorp/vsphere"
-      version = "2.4.2"
-    }
-  }
-}
-provider "vsphere" {
-  user           = var.vsphere_user
-  password       = var.vsphere_password
-  vsphere_server = var.vsphere_server
-
-  # If you have a self-signed cert
-  allow_unverified_ssl = true
-}
-
-#add name DC, name disk, name cluster, name host, name network, name pool
-data "vsphere_datacenter" "dc" {
-  name = var.vsphere_datacenter
+data "vsphere_datacenter" "datacenter" {
+  name = "DevLab"
 }
 
 data "vsphere_datastore" "datastore" {
-  name          = var.vsphere_datastore
-  datacenter_id = data.vsphere_datacenter.dc.id
+  name          = "esxi02-ds"
+  datacenter_id = data.vsphere_datacenter.datacenter.id
 }
 
-data "vsphere_resource_pool" "pool" {
-  name          = var.vsphere_resource_pool
-  datacenter_id = data.vsphere_datacenter.dc.id
+data "vsphere_compute_cluster" "cluster" {
+  name          = "devlab-cl01"
+  datacenter_id = data.vsphere_datacenter.datacenter.id
 }
-data "vsphere_network" "network"{
-  name          = var.vsphere_network
-  datacenter_id = data.vsphere_datacenter.dc.id
+
+data "vsphere_network" "network" {
+  name          = "pdg-servers"
+  datacenter_id = data.vsphere_datacenter.datacenter.id
 }
-data "vsphere_virtual_machine" "win2019" {
-  name          = "lab-dc"
-  datacenter_id = data.vsphere_datacenter.dc.id
+
+data "vsphere_virtual_machine" "template" {
+  name          = "win-server-22-tmplt"
+  datacenter_id = data.vsphere_datacenter.datacenter.id
 }
 
 resource "vsphere_virtual_machine" "vm" {
   name             = "lab-dc"
-  resource_pool_id = data.vsphere_resource_pool.pool.id
+  resource_pool_id = data.vsphere_compute_cluster.cluster.resource_pool_id
   datastore_id     = data.vsphere_datastore.datastore.id
-  num_cpus         = 2
-  memory           = 4096
-  guest_id         = data.vsphere_virtual_machine.win2019.guest_id
-  scsi_type        = data.vsphere_virtual_machine.win2019.scsi_type
-  firmware         = "${var.vsphere_vm_firmware}"
-  
+  num_cpus         = 4
+  memory           = 8192
+  guest_id         = data.vsphere_virtual_machine.template.guest_id
+  scsi_type        = data.vsphere_virtual_machine.template.scsi_type
+  cpu_hot_add_enabled = true
+  cpu_hot_remove_enabled = true
+  memory_hot_add_enabled = true
+  efi_secure_boot_enabled = true
   network_interface {
     network_id   = data.vsphere_network.network.id
-    adapter_type = "vmxnet3"
+    adapter_type = data.vsphere_virtual_machine.template.network_interface_types[0]
   }
   disk {
     label            = "disk0"
-    size             = data.vsphere_virtual_machine.win2019.disks.0.size
-    thin_provisioned = true
+    size             = data.vsphere_virtual_machine.template.disks.0.size
+    thin_provisioned = data.vsphere_virtual_machine.template.disks.0.thin_provisioned
   }
   clone {
-    template_uuid = data.vsphere_virtual_machine.win2019.id
+    template_uuid = data.vsphere_virtual_machine.template.id
     customize {
-      windows_options {
-        computer_name   = "lab-dc"
-        admin_password  = "Passw0rd@123"
-        auto_logon = true
-
+      linux_options {
+        host_name = "hello-world"
+        domain    = "example.com"
       }
       network_interface {
-        ipv4_address = "10.100.40.10"
+        ipv4_address = "172.16.11.10"
         ipv4_netmask = 24
-        dns_server_list = ["10.100.40.1","8.8.8.8"]
-  
       }
-      ipv4_gateway = "10.100.40.1"
+      ipv4_gateway = "172.16.11.1"
     }
-    
   }
-   
-    
 }
-
-
- 
