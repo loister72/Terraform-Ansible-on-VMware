@@ -32,3 +32,23 @@ variable "vsphere_vm_firmware" {
   description = "Firmware set to bios or efi depending on Template"
   default     = "efi"
 }
+
+variable "vm_ip" {
+  default = "10.100.40.10"
+  }
+variable "vm_netmask" {
+  default = "24"
+  }
+variable "vm_dns_server" {
+  default = "10.100.40.1, 1.1.1.1"
+  }
+variable "dns_domain" {
+  default = "pdg.local"
+  }
+  variable "vm_timezone" {
+    default = "020"
+  }
+
+variable "vm_password" {
+    default = ""
+  }
