@@ -23,16 +23,16 @@ data "vsphere_virtual_machine" "template" {
 }
 
 resource "vsphere_virtual_machine" "vm" {
-  name             = "lab-dc"
-  resource_pool_id = data.vsphere_compute_cluster.cluster.resource_pool_id
-  datastore_id     = data.vsphere_datastore.datastore.id
-  num_cpus         = 4
-  memory           = 8192
-  guest_id         = data.vsphere_virtual_machine.template.guest_id
-  scsi_type        = data.vsphere_virtual_machine.template.scsi_type
-  cpu_hot_add_enabled = true
-  cpu_hot_remove_enabled = true
-  memory_hot_add_enabled = true
+  name                    = "lab-dc"
+  resource_pool_id        = data.vsphere_compute_cluster.cluster.resource_pool_id
+  datastore_id            = data.vsphere_datastore.datastore.id
+  num_cpus                = 4
+  memory                  = 8192
+  guest_id                = data.vsphere_virtual_machine.template.guest_id
+  scsi_type               = data.vsphere_virtual_machine.template.scsi_type
+  cpu_hot_add_enabled     = true
+  cpu_hot_remove_enabled  = true
+  memory_hot_add_enabled  = true
   efi_secure_boot_enabled = true
   network_interface {
     network_id   = data.vsphere_network.network.id
