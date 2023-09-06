@@ -1,9 +1,9 @@
 data "vsphere_datacenter" "datacenter" {
-  name = "DevLab"
+  name = var.vsphere_datacenter
 }
 
 data "vsphere_datastore" "datastore" {
-  name          = "esxi02-ds"
+  name          = var.vsphere_datastore
   datacenter_id = data.vsphere_datacenter.datacenter.id
 }
 
@@ -13,17 +13,17 @@ data "vsphere_compute_cluster" "cluster" {
 }
 
 data "vsphere_network" "network" {
-  name          = "pdg-servers"
+  name          = var.vsphere_network
   datacenter_id = data.vsphere_datacenter.datacenter.id
 }
 
 data "vsphere_virtual_machine" "template" {
-  name          = "win-server-22-tmplt"
+  name          = var.vsphere_virtual_machine_template
   datacenter_id = data.vsphere_datacenter.datacenter.id
 }
 
 resource "vsphere_virtual_machine" "vm" {
-  name                    = "lab-dc"
+  name                    = var.vsphere_virtual_machine_name
   resource_pool_id        = data.vsphere_compute_cluster.cluster.resource_pool_id
   datastore_id            = data.vsphere_datastore.datastore.id
   num_cpus                = 4
