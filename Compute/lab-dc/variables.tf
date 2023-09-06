@@ -34,21 +34,24 @@ variable "vsphere_vm_firmware" {
 }
 
 variable "vm_ip" {
-  default = "10.100.40.10"
+  default = ""
   }
 variable "vm_netmask" {
-  default = "24"
+  default = ""
   }
 variable "vm_dns_server" {
-  default = "10.100.40.1, 1.1.1.1"
+  default = ""
   }
-variable "dns_domain" {
-  default = "pdg.local"
+variable "vm_dns_domain" {
+  default = ""
   }
   variable "vm_timezone" {
-    default = "020"
+    default = ""
   }
 
 variable "vm_password" {
     default = "P@ssw0rd123"
+  }
+variable "vm_gateway" {
+    default = ""
   }
