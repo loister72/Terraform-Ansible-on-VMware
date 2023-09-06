@@ -34,6 +34,10 @@ variable "vminfo" {
     vm     = string
     cpu    = string
     memory = string
+    ipv4   = string
+    netmask = string
+    dns-server = string
+    dns-suffix = string
   }))
   default = {
     "dev" = {

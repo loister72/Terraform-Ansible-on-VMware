@@ -49,6 +49,6 @@ resource "vsphere_virtual_machine" "vm" {
       }
       ipv4_gateway = var.vm-gateway
       dns_suffix_list = each.value["dns-suffix"]
-      dns_server_list = var.vm_dns_servers
+      dns_server_list = each.value["dns-server"]
     }
 }
