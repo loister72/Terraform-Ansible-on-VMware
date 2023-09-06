@@ -32,7 +32,7 @@ data "vsphere_network" "network" {
   datacenter_id = "${data.vsphere_datacenter.dc.id}"
 }
 
-data "vsphere_virtual_machine" "template" {
+data "vsphere_virtual_machine" "win2022" {
   name          = "${var.vsphere_virtual_machine_template}"
   datacenter_id = "${data.vsphere_datacenter.dc.id}"
 }
@@ -47,6 +47,7 @@ resource "vsphere_virtual_machine" "cloned_virtual_machine" {
   guest_id = "${data.vsphere_virtual_machine.template.guest_id}"
 
   scsi_type = "${data.vsphere_virtual_machine.template.scsi_type}"
+  firmware  = "${data.vpshere_virtual_machine.template.vsphere_vm_firmware}"
 
   network_interface {
     network_id   = "${data.vsphere_network.network.id}"
@@ -56,9 +57,24 @@ resource "vsphere_virtual_machine" "cloned_virtual_machine" {
   disk {
     label = "disk0"
     size = "${data.vsphere_virtual_machine.template.disks.0.size}"
+    thin_provisioned = true
   }
+}
 
   clone {
     template_uuid = "${data.vsphere_virtual_machine.template.id}"
+     customize {
+      windows_options {
+        computer_name   = "thinhwin2019"
+        admin_password  = "Terabox@@123"
+        auto_logon = true
+      }
+      network_interface {
+        ipv4_address = "10.100.40.10"
+        ipv4_netmask = 24
+        dns_server_list = ["10.100.40.1","8.8.8.8"]
+  
+      }
+      ipv4_gateway = "10.100.40.1"
   }
 }
