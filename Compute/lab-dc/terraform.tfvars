@@ -7,3 +7,12 @@ vsphere_resource_pool            = "/DevLab/host/devlab-cl01/Resources/lab-rp"
 vsphere_network                  = "pdg network"
 vsphere_virtual_machine_template = "win-server-22-tmplt"
 vsphere_virtual_machine_name     = "lab-dc"
+
+//VM Data
+vm_password = "Passw0rd123"
+vm_timezone = "Central Standard Time"
+vm_ip = "10.100.40.10"
+vm_netmask = "24"
+vm_dns_server = "10.100.40.1"
+vm_dns_domain = "pdg.local"
+vm_gateway = "10.100.40.1"
