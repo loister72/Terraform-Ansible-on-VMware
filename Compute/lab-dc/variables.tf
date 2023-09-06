@@ -1,92 +1,35 @@
-# Declare VMware variables
 variable "vsphere_user" {
+  default = "terraform_user@vsphere.local"
 }
-
 variable "vsphere_password" {
+  default = "kvc1DQM_trg_cjt2xjm"
 }
-
+variable "vsphere_datacenter"{
+  default = "DevLab"
+}
+variable "vsphere_datastore"{
+  default = "esxi02-ds"
+}
+variable "vsphere_resource_pool"{
+  default = "/DevLab/host/devlab-cl01/Resources/lab-rp"
+}
+variable "vsphere_host"{
+  default = "esxi-02.oisterfam.net"
+}
+variable "vsphere_network"{
+  default = "pdg-servers"
+}
 variable "vsphere_server" {
+  default = "vcenter.oisterfam.net"
+}
+variable "vm_user"{
+  default = "lsroot"
+}
+variable "vm_password"{
+  default = "Passw0rd@123"
 }
 
-variable "vsphere_datacenter" {
-}
-
-variable "vsphere_datastore_cluster" {
-  description = "Datastore cluster to deploy the VM."
-  default     = ""
-}
-
-variable "vsphere_datastore" {
-  description = "Datastore to deploy the VM."
-  default     = ""
-}
-
-variable "vsphere_resource_pool" {
-}
-
-variable "network_cards" {
-}
-
-variable "ipv4_submask" {
-  description = "ipv4 Subnet Mask"
-  type        = list(string)
-  default     = ["24"]
-}
-
-variable "vsphere_folder" {
-}
-
-variable "vsphere_vm_template_name" {
-}
-
-variable "vsphere_virtual_machine_name" {
-}
-
-variable "vsphere_virtual_machine_count" {
-}
-
-variable "vsphere_virtual_machine_cpu_count" {
-}
-
-variable "vsphere_virtual_machine_memory_size" {
-}
-
-variable "num_cores_per_socket" {
-  description = "The number of cores to distribute among the CPUs in this virtual machine. If specified, the value supplied to num_cpus must be evenly divisible by this value."
-  type        = number
-  default     = 1
-}
-
-variable "cpu_hot_add_enabled" {
-  description = "Allow CPUs to be added to this virtual machine while it is running."
-  default     = null
-}
-
-variable "cpu_hot_remove_enabled" {
-  description = "Allow CPUs to be removed to this virtual machine while it is running."
-  default     = null
-}
-
-variable "memory_hot_add_enabled" {
-  description = "Allow memory to be added to this virtual machine while it is running."
-  default     = null
-}
-
-variable "domain" {
-}
-
-variable "vm_gateway" {
-  description = "VM gateway to set during provisioning"
-  default     = null
-}
-
-variable "vm_dns" {
-  type    = list(string)
-  default = null
-}
-
-variable "admin_user" {
-}
-
-variable "admin_password" {
+variable "vsphere_vm_firmware" {
+  description = "Firmware set to bios or efi depending on Template"
+  default = "efi"
 }

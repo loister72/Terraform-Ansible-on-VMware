@@ -1,15 +1,27 @@
-data "vsphere_datacenter" "dc" {
-  name = "${var.vsphere_datacenter}"
+
+terraform {
+  required_providers {
+    vsphere = {
+      source = "hashicorp/vsphere"
+      version = "2.4.2"
+    }
+  }
+}
+provider "vsphere" {
+  user           = var.vsphere_user
+  password       = var.vsphere_password
+  vsphere_server = var.vsphere_server
+
+  # If you have a self-signed cert
+  allow_unverified_ssl = true
 }
 
-data "vsphere_datastore_cluster" "datastore_cluster" {
-  count         = var.vsphere_datastore_cluster != "" ? 1 : 0
-  name          = var.vsphere_datastore_cluster
-  datacenter_id = data.vsphere_datacenter.dc.id
+#add name DC, name disk, name cluster, name host, name network, name pool
+data "vsphere_datacenter" "dc" {
+  name = var.vsphere_datacenter
 }
 
 data "vsphere_datastore" "datastore" {
-  count         = var.vsphere_datastore != "" && var.vsphere_datastore_cluster == "" ? 1 : 0
   name          = var.vsphere_datastore
   datacenter_id = data.vsphere_datacenter.dc.id
 }
@@ -18,19 +30,56 @@ data "vsphere_resource_pool" "pool" {
   name          = var.vsphere_resource_pool
   datacenter_id = data.vsphere_datacenter.dc.id
 }
-
-data "vsphere_network" "network" {
-  count         = var.network_cards != null ? length(var.network_cards) : 0
-  name          = var.network_cards[count.index]
+data "vsphere_network" "network"{
+  name          = var.vsphere_network
+  datacenter_id = data.vsphere_datacenter.dc.id
+}
+data "vsphere_virtual_machine" "win2019" {
+  name          = "lab-dc"
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
-data "vsphere_virtual_machine" "template" {
-  name          = "${var.vsphere_vm_template_name}"
-  datacenter_id = "${data.vsphere_datacenter.dc.id}"
+resource "vsphere_virtual_machine" "vm" {
+  name             = "lab-dc"
+  resource_pool_id = data.vsphere_resource_pool.pool.id
+  datastore_id     = data.vsphere_datastore.datastore.id
+  num_cpus         = 2
+  memory           = 4096
+  guest_id         = data.vsphere_virtual_machine.win2019.guest_id
+  scsi_type        = data.vsphere_virtual_machine.win2019.scsi_type
+  firmware         = "${var.vsphere_vm_firmware}"
+  
+  network_interface {
+    network_id   = data.vsphere_network.network.id
+    adapter_type = "vmxnet3"
+  }
+  disk {
+    label            = "disk0"
+    size             = data.vsphere_virtual_machine.win2019.disks.0.size
+    thin_provisioned = true
+  }
+  clone {
+    template_uuid = data.vsphere_virtual_machine.win2019.id
+    customize {
+      windows_options {
+        computer_name   = "lab-dc"
+        admin_password  = "Passw0rd@123"
+        auto_logon = true
+
+      }
+      network_interface {
+        ipv4_address = "10.100.40.10"
+        ipv4_netmask = 24
+        dns_server_list = ["10.100.40.1","8.8.8.8"]
+  
+      }
+      ipv4_gateway = "10.100.40.1"
+    }
+    
+  }
+   
+    
 }
 
-locals {
-  interface_count     = length(var.ipv4_submask) #Used for Subnet handeling
-  template_disk_count = length(data.vsphere_virtual_machine.template.disks)
-}
+
+ 
