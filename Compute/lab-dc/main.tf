@@ -46,5 +46,23 @@ resource "vsphere_virtual_machine" "vm" {
   }
   clone {
     template_uuid = data.vsphere_virtual_machine.template.id
+    customize{
+      windows_options {
+        computer_name = var.vsphere_virtual_machine_name
+        admin_password = var.vm_password == "" ? random_password.password.result : var.vm_password
+        workgroup        = "WORKGROUP"
+        auto_logon       = true
+        auto_logon_count = 1
+        time_zone        = var.vm_timezone
+
+      }
+
+      network_interface {
+        ipv4_address    = var.vm_ip
+        ipv4_netmask    = var.vm_netmask
+        dns_server_list = var.vm_dns_servers
+        dns_domain      = var.vm_dns_domain
+      }
+    }
   }
 }
