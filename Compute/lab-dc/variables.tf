@@ -30,5 +30,5 @@ variable "vsphere_virtual_machine_template" {}
 variable "vsphere_virtual_machine_name" {}
 variable "vsphere_vm_firmware" {
   description = "Firmware set to bios or efi depending on Template"
-  default = "efi"
+  default     = "efi"
 }

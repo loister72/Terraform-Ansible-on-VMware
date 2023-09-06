@@ -23,21 +23,22 @@ data "vsphere_virtual_machine" "template" {
 }
 
 resource "vsphere_virtual_machine" "vm" {
-  name                    = var.vsphere_virtual_machine_name
-  resource_pool_id        = data.vsphere_compute_cluster.cluster.resource_pool_id
-  datastore_id            = data.vsphere_datastore.datastore.id
-  num_cpus                = 4
-  memory                  = 8192
-  guest_id                = data.vsphere_virtual_machine.template.guest_id
-  scsi_type               = data.vsphere_virtual_machine.template.scsi_type
-  cpu_hot_add_enabled     = true
-  cpu_hot_remove_enabled  = true
-  memory_hot_add_enabled  = true
-  efi_secure_boot_enabled = true
+  name                   = var.vsphere_virtual_machine_name
+  resource_pool_id       = data.vsphere_compute_cluster.cluster.resource_pool_id
+  datastore_id           = data.vsphere_datastore.datastore.id
+  num_cpus               = 4
+  memory                 = 8192
+  guest_id               = data.vsphere_virtual_machine.template.guest_id
+  scsi_type              = data.vsphere_virtual_machine.template.scsi_type
+  cpu_hot_add_enabled    = true
+  cpu_hot_remove_enabled = true
+  memory_hot_add_enabled = true
+  firmware               = "efi"
+
   network_interface {
     network_id   = data.vsphere_network.network.id
-    adapter_type = data.vsphere_virtual_machine.template.network_interface_types[0]
-  }
+    adapter_type = "vmxnet3" 
+    }
   disk {
     label            = "disk0"
     size             = data.vsphere_virtual_machine.template.disks.0.size
@@ -45,11 +46,5 @@ resource "vsphere_virtual_machine" "vm" {
   }
   clone {
     template_uuid = data.vsphere_virtual_machine.template.id
-   }
-      network_interface {
-        ipv4_address = "10.100.40.10"
-        ipv4_netmask = 24
-      }
-      ipv4_gateway = "10.100.10.1"
-    }
+  }
 }
