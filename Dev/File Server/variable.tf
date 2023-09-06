@@ -40,11 +40,19 @@ variable "vminfo" {
       vm     = "galaxy-fs"
       cpu    = "1"
       memory = "1024"
+      ipv4   = "10.100.40.30"
+      netmask = "255.255.255.0"
+      dns-server = "10.100.40.1"
+      dns-suffix = "oisterfam.net"
     }
     "prod" = {
       vm     = "gardian-fs"
       cpu    = "2"
       memory = "2048"
+      ipv4   = "10.100.40.60"
+      netmask = "255.255.255.0"
+      dns-server = "10.100.40.1"
+      dns-suffix = "oisterfam.net"
     }
   }
 }

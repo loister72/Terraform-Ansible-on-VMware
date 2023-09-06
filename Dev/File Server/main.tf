@@ -44,9 +44,11 @@ resource "vsphere_virtual_machine" "vm" {
   clone {
     template_uuid = data.vsphere_virtual_machine.template.id
          network_interface {
-        #  ipv4_address = "172.16.11.10"
-        #  ipv4_netmask = 24
+        ipv4_address = each.value["ipv4"]
+        ipv4_netmask = each.value["netmask"]
       }
-      #ipv4_gateway = "172.16.11.1"
+      ipv4_gateway = var.vm-gateway
+      dns_suffix_list = each.value["dns-suffix"]
+      dns_server_list = var.vm_dns_servers
     }
 }
