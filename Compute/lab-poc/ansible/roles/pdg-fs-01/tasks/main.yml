@@ -18,3 +18,16 @@
 - name: reboot after domain join
   win_reboot:
   when: domain_joined.reboot_required
+
+- name: Create directory multiverse
+  ansible.windows.win_file:
+    path: C:\shares\multiverse
+    state: directory
+
+- name: Add Multiverse Share
+  ansible.windows.win_share:
+    name: Multiverse
+    description: Where we lost everything
+    path: C:\shares\multiverse
+    list: yes
+    full: Administrators
