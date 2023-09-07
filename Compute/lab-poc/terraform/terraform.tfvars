@@ -34,6 +34,12 @@ Fileserver_IP      = "10.100.40.20"
 Fileserver_cpu_num = 4
 Fileserver_mem     = 8192
 
+# MySQL settings
+msql_name    = "pdg-msql-01"
+msql_ip      = "10.100.40.50"
+msql_cpu_num = 4
+msql_mem     = 16384
+
 # Common network params
 netmask    = "24"
 def_gw     = "10.100.40.1"

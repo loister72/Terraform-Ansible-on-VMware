@@ -27,4 +27,12 @@ variable "PDC_mem" {}
 variable "ReplicaDC_mem" {}
 variable "Fileserver_mem" {}
 
+//My SQL Vars
+variable "msql_name" {}
+variable "msql_cpu_num" {}
+variable "msql_mem" {}
+variable "msql_ip" {}
+
+
+
 
