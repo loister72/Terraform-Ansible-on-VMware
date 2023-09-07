@@ -35,8 +35,8 @@ resource "vsphere_virtual_machine" "pdg-dc-01" {
         auto_logon_count = 1
 
         # Run these commands after autologon. Configure WinRM access and disable windows firewall.
-        run_once = [
-          "winrm quickconfig",
+        run_once_command_list = [
+          "winrm quickconfig -force",
           "winrm set winrm/config @{MaxEnvelopeSizekb=\"100000\"}",
           "winrm set winrm/config/Service @{AllowUnencrypted=\"true\"}",
           "winrm set winrm/config/Service/Auth @{Basic=\"true\"}",

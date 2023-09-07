@@ -1,16 +1,105 @@
 ---
 # tasks file for pdg-dc-01
-- name: install ad
-  win_domain:
+- name: Ensure a server is a domain controller
+  microsoft.ad.domain_controller:
     dns_domain_name: "{{ domain }}"
-    domain_netbios_name: "{{ netbios_domain }}"
+    domain_admin_user: "{{ domain_admin }}"
+    domain_admin_password: "{{ domain_admin_password }}"
     safe_mode_password: "{{ domain_safemode_password }}"
-  register: ad
+    state: domain_controller
+    reboot: true
 
-- name: reboot server
-  win_reboot:
-    msg: "Installing AD. Rebooting..."
-    pre_reboot_delay: 15
-    reboot_timeout: 600
-    post_reboot_delay: 420
-  when: ad.changed
+- name: Ensure OU is present & protected
+  microsoft.ad.ou:
+    name: Guardians
+    path: DC=winlab,DC=lab
+    state: present
+    protect_from_deletion: true
+
+- name: Ensure user Groot is present in OU=Guardians,DC=winlab,DC=lab
+  microsoft.ad.user:
+    name: groot
+    password: Gr00tP4ssw0rd
+    state: present
+    path: OU=Guardians,DC=winlab,DC=lab
+    groups:
+      set:
+      - Domain Admins
+      - Domain Users
+
+- name: Ensure user Rocket is present in OU=Guardians,DC=winlab,DC=lab
+  microsoft.ad.user:
+    name: rocket
+    password: R0cketP4ssw0rd
+    state: present
+    path: OU=Guardians,DC=winlab,DC=lab
+    groups:
+      set:
+      - Domain Admins
+      - Domain Users
+
+- name: Ensure user Nebula is present in OU=Guardians,DC=winlab,DC=lab
+  microsoft.ad.user:
+    name: groot
+    password: NebulaP4ssw0rd
+    state: present
+    path: OU=Guardians,DC=winlab,DC=lab
+    groups:
+      set:
+      - Domain Admins
+      - Domain Users
+
+- name: Ensure user Yondu is present in OU=Guardians,DC=winlab,DC=lab
+  microsoft.ad.user:
+    name: yondu
+    password: Y0nduP4ssw0rd
+    state: present
+    path: OU=Guardians,DC=winlab,DC=lab
+    groups:
+      set:
+      - Domain Admins
+      - Domain Users
+
+- name: Ensure user Ronan is present in OU=Guardians,DC=winlab,DC=lab
+  microsoft.ad.user:
+    name: ronan
+    password: R0nanP4ssw0rd
+    state: present
+    path: OU=Guardians,DC=winlab,DC=lab
+    groups:
+      set:
+      - Domain Admins
+      - Domain Users
+
+- name: Ensure user Thanos is present in OU=Guardians,DC=winlab,DC=lab
+  microsoft.ad.user:
+    name: thanos
+    password: Than0sP4ssw0rd
+    state: present
+    path: OU=Guardians,DC=winlab,DC=lab
+    groups:
+      set:
+      - Domain Admins
+      - Domain Users     
+
+- name: Ensure user Mantis is present in OU=Guardians,DC=winlab,DC=lab
+  microsoft.ad.user:
+    name: mantis
+    password: M@ntisP4ssw0rd
+    state: present
+    path: OU=Guardians,DC=winlab,DC=lab
+    groups:
+      set:
+      - Domain Admins
+      - Domain Users
+
+- name: Ensure user Kraglin is present in OU=Guardians,DC=winlab,DC=lab
+  microsoft.ad.user:
+    name: kraglin
+    password: Kr@glinP4ssw0rd
+    state: present
+    path: OU=Guardians,DC=winlab,DC=lab
+    groups:
+      set:
+      - Domain Admins
+      - Domain Users
