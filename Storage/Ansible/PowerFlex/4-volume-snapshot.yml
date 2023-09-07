@@ -1,0 +1,32 @@
+- name: Snapshot Operations
+  hosts: localhost
+  connection: local
+  gather_facts: False
+  vars:
+    gateway_host: '<gatewayIP>'
+    port: '443'
+    verifycert: False
+    username: '<uname>'
+    password: '<Pword>'
+    vol_name: "ansible_test_volume"
+    snapshot_name: "ansible_test_snapshot_1"
+
+  collections:
+    - dellemc.powerflex
+
+  tasks:
+  - name: Create snapshot
+    register: result
+    dellemc.powerflex.snapshot:
+      gateway_host: "{{gateway_host}}"
+      username: "{{username}}"
+      password: "{{password}}"
+      verifycert: "{{verifycert}}"
+      snapshot_name: "{{snapshot_name}}"
+      vol_name: "{{vol_name}}"
+      state: "present"
+    register: subset_results_snapshot
+
+  - debug:
+     var: subset_results_snapshot
+

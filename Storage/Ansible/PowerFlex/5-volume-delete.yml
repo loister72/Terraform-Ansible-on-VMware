@@ -1,0 +1,44 @@
+- name: Volume operations on powerflex array.
+  hosts: localhost
+  connection: local
+  gather_facts: False
+  vars:
+    gateway_host: '<gatewayIP>'
+    port: '443'
+    verifycert: False
+    username: '<uname>'
+    password: '<Pword>'
+    protection_domain_name: "PD01"
+    storage_pool_name: "SP01"
+    snapshot_policy_name: ""
+    vol_name: "ansible_test_volume"
+
+  collections:
+    - dellemc.powerflex
+
+  tasks:
+  - name: Unmap SDCs from volume
+    dellemc.powerflex.volume:
+      gateway_host: "{{gateway_host}}"
+      username: "{{username}}"
+      password: "{{password}}"
+      verifycert: "{{verifycert}}"
+      vol_name: "{{vol_name}}"
+      sdc:
+      - sdc_name: "<sdcIP1"
+      - sdc_name: "<sdcIP2>"
+      snapshot_policy_name: ""
+      auto_snap_remove_type: "remove"
+      sdc_state: "unmapped"
+      state: "present"
+
+  - name: Delete volume
+    dellemc.powerflex.volume:
+      gateway_host: "{{gateway_host}}"
+      username: "{{username}}"
+      password: "{{password}}"
+      verifycert: "{{verifycert}}"
+      vol_name: "{{vol_name}}"
+      delete_snapshots: True
+      state: "absent"
+
