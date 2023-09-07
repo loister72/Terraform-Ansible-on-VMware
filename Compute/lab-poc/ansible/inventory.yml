@@ -8,3 +8,6 @@ replica_domain_controller:
 fileserver:
   hosts:
     10.100.40.20:
+msql:
+  hosts: 
+    10.100.40.50:

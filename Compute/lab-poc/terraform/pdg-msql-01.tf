@@ -28,7 +28,7 @@ resource "vsphere_virtual_machine" "pdg-msql-01" {
 
     customize {
       windows_options {
-        computer_name    = var.Fileserver_name
+        computer_name    = var.msql_name
         admin_password   = var.winadmin_password
         auto_logon       = true
         auto_logon_count = 1
@@ -44,7 +44,7 @@ resource "vsphere_virtual_machine" "pdg-msql-01" {
       }
 
       network_interface {
-        ipv4_address    = var.Fileserver_IP
+        ipv4_address    = var.msql_ip
         ipv4_netmask    = var.netmask
         dns_server_list = [var.dns_server]
       }
