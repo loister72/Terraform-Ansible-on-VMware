@@ -11,7 +11,7 @@
   roles:
     - pdg-fs-01
 
-- hosts: pdg-msql-01
+- hosts: msql
   roles:
     - pdg-msql-01
     
