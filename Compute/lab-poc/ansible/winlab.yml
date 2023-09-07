@@ -1,16 +1,16 @@
 ---
 - hosts: primary_domain_controller
   roles:
-    - primary_domain_controller
+    - pdg-dc-01
     - common
 
 - hosts: replica_domain_controller
   roles:
-    - replica_domain_controller
+    - pdg-dc-02
     - common
 
 - hosts: fileserver
   roles:
-    - fileserver
+    - pdg-fs-01
     - common
     

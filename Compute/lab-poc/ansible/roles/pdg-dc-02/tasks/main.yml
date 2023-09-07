@@ -1,4 +1,5 @@
 ---
+# tasks file for pdg-dc-02
 - name: change DNS server
   when: not ansible_windows_domain_member
   win_dns_client:

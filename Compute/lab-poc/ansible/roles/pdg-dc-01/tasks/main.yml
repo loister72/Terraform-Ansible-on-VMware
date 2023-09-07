@@ -1,4 +1,5 @@
 ---
+# tasks file for pdg-dc-01
 - name: install ad
   win_domain:
     dns_domain_name: "{{ domain }}"

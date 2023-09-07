@@ -1,4 +1,5 @@
 ---
+# tasks file for pdg-fs-01
 - name: change DNS server
   win_dns_client:
     adapter_names: '*'

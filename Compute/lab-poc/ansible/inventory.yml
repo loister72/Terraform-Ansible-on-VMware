@@ -1,10 +1,10 @@
 ---
 primary_domain_controller:
   hosts:
-    10.5.202.4:
+    10.100.40.10:
 replica_domain_controller:
   hosts:
-    10.5.202.5:
+    10.100.40.11:
 fileserver:
   hosts:
-    10.5.202.6:
+    10.100.40.20:

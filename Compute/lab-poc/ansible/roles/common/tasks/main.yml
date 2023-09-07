@@ -1,7 +1,1 @@
 - include: enable_rdp.yml
-
-#- name: ensure putty is installed via Chocolatey
-#  win_chocolatey:
-#    name: putty
-#    state: present
-    
